@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    
+        <url>
+            <loc>https://arpan-dhatt.github.io/</loc>
+            
+        </url>
+    
+        <url>
+            <loc>https://arpan-dhatt.github.io/about/</loc>
+            
+        </url>
+    
+        <url>
+            <loc>https://arpan-dhatt.github.io/posts/</loc>
+            
+        </url>
+    
+        <url>
+            <loc>https://arpan-dhatt.github.io/posts/syntax-highlighting/</loc>
+            
+                <lastmod>2019-02-02</lastmod>
+            
+        </url>
+    
+        <url>
+            <loc>https://arpan-dhatt.github.io/tags/</loc>
+            
+        </url>
+    
+        <url>
+            <loc>https://arpan-dhatt.github.io/tags/post/</loc>
+            
+        </url>
+    
+        <url>
+            <loc>https://arpan-dhatt.github.io/tags/programming/</loc>
+            
+        </url>
+    
+        <url>
+            <loc>https://arpan-dhatt.github.io/tags/syntax/</loc>
+            
+        </url>
+    
+</urlset>
