@@ -23,6 +23,10 @@
 &lt;p&gt;Below is an image&lt;&#x2F;p&gt;
 &lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;spacex-rockets-landing.jpg&quot; alt=&quot;Space X Falcon Heavy Boosters Landing&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
 &lt;p&gt;Awesome! That wasn&#x27;t as hard as I thought it was going to be.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;getting-started-with-zola&quot;&gt;Getting started with Zola&lt;&#x2F;h2&gt;
+&lt;p&gt;You look at the documentation&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;one-reason-it-s-awesome&quot;&gt;One reason it&#x27;s awesome&lt;&#x2F;h3&gt;
+&lt;p&gt;It&#x27;s just a binary: no dependencies or anything!&lt;&#x2F;p&gt;
 </description>
             </item>
         
