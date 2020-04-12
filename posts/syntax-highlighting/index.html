@@ -58,7 +58,7 @@
         
         
             
-                &#183; 80 words
+                &#183; 100 words
             
         
         
@@ -92,9 +92,17 @@
         </ul>
     <p>Here is some syntax hightlighting.</p>
 <pre style="background-color:#2b303b;">
-<span style="color:#c0c5ce;">x = [</span><span style="color:#d08770;">5</span><span style="color:#c0c5ce;">,</span><span style="color:#d08770;">4</span><span style="color:#c0c5ce;">,</span><span style="color:#d08770;">3</span><span style="color:#c0c5ce;">]
-</span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">i </span><span style="color:#b48ead;">in </span><span style="color:#c0c5ce;">x:
-    </span><span style="color:#96b5b4;">print</span><span style="color:#c0c5ce;">(i)
+<span style="color:#b48ead;">unsafe fn </span><span style="color:#8fa1b3;">offset_Momentum</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">bodies</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">*mut</span><span style="color:#c0c5ce;"> body){
+    </span><span style="color:#b48ead;">for</span><span style="color:#c0c5ce;"> i in </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">..</span><span style="color:#d08770;">BODIES_COUNT </span><span style="color:#c0c5ce;">{
+        </span><span style="color:#b48ead;">for</span><span style="color:#c0c5ce;"> m in </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">..</span><span style="color:#d08770;">3 </span><span style="color:#c0c5ce;">{
+            (*bodies.</span><span style="color:#96b5b4;">add</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">)).velocity[m] -=
+                (*bodies.</span><span style="color:#96b5b4;">add</span><span style="color:#c0c5ce;">(i)).velocity[m]
+                    * (*bodies.</span><span style="color:#96b5b4;">add</span><span style="color:#c0c5ce;">(i)).mass
+                    / </span><span style="color:#d08770;">SOLAR_MASS</span><span style="color:#c0c5ce;">;
+        }
+    }
+}
+
 </span></pre>
 <p>Below is an image</p>
 <p><img src="/images/spacex-rockets-landing.jpg" alt="Space X Falcon Heavy Boosters Landing" /></p>
