@@ -1,2 +1,2 @@
 User-agent: *
-Sitemap: https://arpan-dhatt.github.io/sitemap.xml
+Sitemap: https://arpandhatt.me/sitemap.xml

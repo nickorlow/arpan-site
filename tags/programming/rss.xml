@@ -2,18 +2,18 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>Arpan Dhatt</title>
-        <link>https://arpan-dhatt.github.io</link>
+        <link>https://arpandhatt.me</link>
         <description></description>
         <generator>Zola</generator>
         <language>en</language>
-        <atom:link href="https://arpan-dhatt.github.io/tags/programming/rss.xml" rel="self" type="application/rss+xml"/>
+        <atom:link href="https://arpandhatt.me/tags/programming/rss.xml" rel="self" type="application/rss+xml"/>
         <lastBuildDate>Mon, 13 Apr 2020 00:00:00 +0000</lastBuildDate>
         
             <item>
                 <title>Is No-Code the Future of Software?</title>
                 <pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate>
-                <link>https://arpan-dhatt.github.io/posts/no-code/</link>
-                <guid>https://arpan-dhatt.github.io/posts/no-code/</guid>
+                <link>https://arpandhatt.me/posts/no-code/</link>
+                <guid>https://arpandhatt.me/posts/no-code/</guid>
                 <description>&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;&#x2F;h2&gt;
 &lt;p&gt;The prospects of creating software without code are enticing. If you are a budding entrepreneur, you can create an app without learning to program or hiring expensive developers. Even large companies can save money by avoiding the hassles of software engineering. It seems like no-code is the future that should already be here. However, there are some fundamental issues with no-code development that limit its potential.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;what-even-is-code&quot;&gt;What Even is Code?&lt;&#x2F;h2&gt;
