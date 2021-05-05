@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-164566872-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-164566872-1');
+    </script>
+
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    
+    <meta name="description" content="One of the most effective ways to combat an epidemic is contact tracing.  Selectively quarantining people may not be as effective as the broad quarantining of an entire population, but it has many benefits, such...">
+    
+
+    <link rel="stylesheet" href="https:&#x2F;&#x2F;arpan.one&#x2F;fonts.css">
+    <link rel="stylesheet" href="https:&#x2F;&#x2F;arpan.one&#x2F;style.css">
+
+    <title>
+    How We Can Use Digital Contact Tracing - Arpan Dhatt
+</title>
+
+    
+</head>
+
+<body>
+    
+    <div class="wrap">
+        
+    <div class="section top-menu">
+        <p>
+            <a href="https:&#x2F;&#x2F;arpan.one">home</a>
+            
+                
+                    &#183;
+                    <a href="&#x2F;posts">posts</a>
+                
+                    &#183;
+                    <a href="&#x2F;tags">tags</a>
+                
+                    &#183;
+                    <a href="&#x2F;about">about</a>
+                
+                    &#183;
+                    <a href="https:&#x2F;&#x2F;github.com&#x2F;arpan-dhatt&#x2F;arpan-dhatt.github.io">github</a>
+                
+            
+        </p>
+    </div>
+
+        <h1 class="section" id="title" style="font-weight: inherit; text-align: left;">
+            <span><a href="https:&#x2F;&#x2F;arpan.one">Arpan Dhatt</a> / 
+    How We Can Use Digital Contact Tracing
+</span>
+        </h1>
+        <div class="section" id="content">
+            
+    
+        
+            
+    
+    Tue Apr 28, 2020
+
+        
+        
+            
+                &#183; 1477 words
+            
+        
+        
+            
+            
+                &#183; 8 min
+            
+        
+        <hr/>
+    
+    <ul>
+        
+            <li>
+                <a href="https://arpan.one/posts/contact-tracing/#introduction">Introduction</a>
+                
+            </li>
+        
+            <li>
+                <a href="https://arpan.one/posts/contact-tracing/#how-can-it-be-done">How Can It Be Done?</a>
+                
+            </li>
+        
+            <li>
+                <a href="https://arpan.one/posts/contact-tracing/#you-can-have-your-cake-and-eat-it-too-mostly">You can Have Your Cake and Eat It Too (mostly)</a>
+                
+            </li>
+        
+            <li>
+                <a href="https://arpan.one/posts/contact-tracing/#still-not-a-silver-bullet">Still Not a Silver Bullet</a>
+                
+            </li>
+        
+            <li>
+                <a href="https://arpan.one/posts/contact-tracing/#why-i-will-sign-up">Why I Will Sign Up</a>
+                
+            </li>
+        
+            <li>
+                <a href="https://arpan.one/posts/contact-tracing/#references-and-further-reading">References and Further Reading</a>
+                
+            </li>
+        
+        </ul>
+    <h2 id="introduction">Introduction</h2>
+<p>One of the most effective ways to combat an epidemic is contact tracing.  Selectively quarantining people may not be as effective as the broad quarantining of an entire population, but it has many benefits, such as reducing the impact on the economy. This is especially important as many people do not have enough savings to survive for long periods in lockdown.</p>
+<h2 id="how-can-it-be-done">How Can It Be Done?</h2>
+<p>Currently, most contact tracing is done by &quot;interviewing&quot; a diagnosed patient to determine where they were and who they were in contact with. Although this requires no additional infrastructure to work, it is very error-prone. The patient may also need to recall this information over a long period of time. This is especially problematic in urban areas where diseases spread the most quickly, and people live and work closely together. Although this system was proven to help in previous outbreaks such as the Ebola outbreak in 2014[1] and the SARS outbreak in 2003[2], COVID-19 is much more infectious and widespread. We need a different solution.</p>
+<p>An enticing alternative is automated contact tracing through cellphones. Right now, especially in the US, there is a very high penetration of smartphones with a variety of sensors and wireless communication capabilities. People also keep these devices with them when they leave their homes. This combination makes these devices ideal for contact tracing. However, there is one serious concern that needs to be addressed before a solution is implemented: privacy. The most obvious way to do contact tracing through smartphones is tracking everyone's location at all times. To many people, this would be an unacceptable solution, even if it has the potential to drastically mitigate the virus's spread. It is not only a question of who has access to the data; hackers could also infiltrate such a system and track people for malicious purposes. More authoritarian countries such as China can sidestep the privacy issue, but others must find another way to gain the consent of users.</p>
+<h2 id="you-can-have-your-cake-and-eat-it-too-mostly">You can Have Your Cake and Eat It Too (mostly)</h2>
+<p>Two long-time rivals, Apple and Google, partnered up to create a solution that preserves the privacy of individuals while providing many of the same benefits as a centralized system[3]. Their system employs a combination of Bluetooth and cryptographic techniques to hide the identities of users while providing many of the same features a centralized tracking system would provide. However, a system like this is far more complex than logging location data on a server. Instead, a user's phone will send out signals to nearby devices. MIT's solution[4] likened them to &quot;chirps&quot;. Whenever anyone's device hears these &quot;chirps&quot;, they are stored. Let's imagine a hypothetical scenario to illustrate how the tracing solution would work.</p>
+<p>When your device is updated, you are given the option to consent to the service. After you activate the service, your device will create a unique tracking key. This is what identifies your device and it will never be shared, not with other devices or a central server. Every day you use your device, it will create a daily tracking key.</p>
+<p>You then decide you need to go grocery shopping since restaurants are closed. Your device automatically connects to and communicates with other nearby devices that have the tracing software activated. It sends them a &quot;Rolling Proximity Identifier&quot; which is generated from the daily tracking key. We will call them &quot;chirps&quot; and they contain a unique identifier. These IDs are stored on all devices that hear them. The IDs of the chirps that your device emits change every 15 minutes. Your device is simultaneously listening and storing chirps from other devices.
+<img src="/images/Chirp_Illustration.png" alt="An illustration how &quot;chirps&quot; work and change every 15 minutes" />
+Because the chirps change so often, the device they come from is very hard to track over long periods of time. Creating the chirp IDs in this multi-step process also increases security.</p>
+<p>Continuing with the story, somebody who activated the service contracts COVID-19. They will send their daily tracking keys for the past two weeks to a central database. These keys don't store any personal information. If you have the service on, you will receive these keys. Your device will automatically recreate the IDs of the chirps this anonymous person broadcasted. If the device recalls &quot;hearing&quot; them then you were in close contact with that person sometime within the past two weeks.
+<img src="/images/Distribute_Keys.png" alt="An illustration how &quot;chirps&quot; are regenerated and compared to what a device heard" />
+The patient's privacy will be preserved since nobody will know who's chirps their devices heard (mostly...keep reading!).</p>
+<h2 id="still-not-a-silver-bullet">Still Not a Silver Bullet</h2>
+<p>Although this system is a huge step up from GPS-based location tracking, there are still some concerns related to privacy. Due to the increased complexity of the system, there are also technical challenges that need to be overcome.</p>
+<p>Ashkan Soltani, a former FTC chief technologist describes a way someone could determine who was infected[5]. A malicious user could manually or automatically(possibly through computer vision) assign the names of people to the chirps their devices emitted. Then, when they generate the IDs of the chirps from daily tracking keys sent by the server, they can identify who was infected if they had assigned a name to the chirp earlier. Employees at Apple and Google couldn't come up with a solution on the spot but responded that a surveillance camera at a clinic entrance would be more effective. Either way, a large scale attack is still impossible.</p>
+<p>Also, ad services will be barred from using the tracing API. It is reasonable to wonder if stores will attempt to record location data. It is definitely possible using the same technique Soltani suggested, but tracking the transactions is much more practical and is already in practice.</p>
+<p>The biggest security hole in the system is when someone uploads their daily tracking keys. Due to the nature of how information is sent through the internet, IP addresses are traceable. An organization can use this to find out who uploaded the keys. However, it's only possible if that organization has a directory of users and the IP addresses of their phones. Apple and Google have said their solutions will not record IP addresses for privacy, but if they wanted to it is possible. It will be a matter of policy, not a technical impossibility.</p>
+<p>There is also the challenge of detecting proximity using Bluetooth. It is done through signal strength, but it can be obscured by things such as a person's body or the cloth of a pocket. Apple and Google said they are working on ways to circumvent these obstacles by using other sensors on a phone. For example, if a phone detects a walking gait using accelerometers and darkness using a light sensor, the phone is likely in a pocket. This is can be used to correct proximity calculations.</p>
+<p>There are also issues with service penetration. Many devices may be too old to support all the sensors required. Some people might not have devices at all. This system will undoubtedly reveal more inequalities in our society. People who work low-pay, high-risk jobs might not be able to afford a device with the capabilities required, especially during this time. This can be mitigated by suggesting some low-cost tracing-capable devices. Also, the system is opt-in which is the right thing to have, but it will likely reduce the system's effectiveness. There is promising research done by Oxford University that if 60% or less of users opted in, the system would be still effective[6].</p>
+<h2 id="why-i-will-sign-up">Why I Will Sign Up</h2>
+<p>The system is far from perfect. Nobody should expect it to be. However, whenever I have the option to activate the service, I will because the risks are relatively minor. In times of crisis, there are always some sacrifices that need to be made. Thanks to the work by the employees and Apple and Google, this sacrifice has become a lot easier to swallow.</p>
+<h2 id="references-and-further-reading">References and Further Reading</h2>
+<ol>
+<li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6152989/">Contact tracing performance during the Ebola epidemic in Liberia, 2014-2015
+</a></li>
+<li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6376160/">Epidemic Models of Contact Tracing: Systematic Review of Transmission Studies of Severe Acute Respiratory Syndrome and Middle East Respiratory Syndrome
+</a></li>
+<li><a href="https://www.apple.com/covid19/contacttracing">Apple | Privacy-Preserving Contact Tracing</a></li>
+<li><a href="http://news.mit.edu/2020/bluetooth-covid-19-contact-tracing-0409">Bluetooth signals from your smartphone could automate Covid-19 contact tracing while preserving privacy
+</a></li>
+<li><a href="https://www.wired.com/story/apple-google-contact-tracing-strengths-weaknesses/">Does Covid-19 Contact Tracing Pose a Privacy Risk?
+</a></li>
+<li><a href="https://www.research.ox.ac.uk/Article/2020-04-16-digital-contact-tracing-can-slow-or-even-stop-coronavirus-transmission-and-ease-us-out-of-lockdown">Digital contact tracing can slow or even stop coronavirus 
+transmission and ease us out of lockdown
+</a></li>
+</ol>
+
+    
+            <div class="tag-container">
+                
+                    <span class="tag">
+                        <a href="https:&#x2F;&#x2F;arpan.one&#x2F;tags&#x2F;coronavirus&#x2F;">
+                            #coronavirus
+                        </a>
+                    </span>
+                
+                    <span class="tag">
+                        <a href="https:&#x2F;&#x2F;arpan.one&#x2F;tags&#x2F;contact-tracing&#x2F;">
+                            #contact-tracing
+                        </a>
+                    </span>
+                
+                    <span class="tag">
+                        <a href="https:&#x2F;&#x2F;arpan.one&#x2F;tags&#x2F;apple&#x2F;">
+                            #apple
+                        </a>
+                    </span>
+                
+                    <span class="tag">
+                        <a href="https:&#x2F;&#x2F;arpan.one&#x2F;tags&#x2F;google&#x2F;">
+                            #google
+                        </a>
+                    </span>
+                
+            </div>
+        
+
+        </div>
+        
+    <div class="section bottom-menu">
+        <hr/>
+        <p>
+            <a href="https:&#x2F;&#x2F;arpan.one">home</a>
+            
+                
+                    &#183;
+                    <a href="&#x2F;posts">posts</a>
+                
+                    &#183;
+                    <a href="&#x2F;tags">tags</a>
+                
+                    &#183;
+                    <a href="&#x2F;about">about</a>
+                
+                    &#183;
+                    <a href="https:&#x2F;&#x2F;github.com&#x2F;arpan-dhatt&#x2F;arpan-dhatt.github.io">github</a>
+                
+            
+        </p>
+    </div>
+
+        
+    
+        <div class="section footer">
+            © 2020 Arpan Dhatt
+        </div>
+    
+
+    </div>
+
+</body>
+
+</html>

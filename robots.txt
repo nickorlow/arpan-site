@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://arpan.one/sitemap.xml

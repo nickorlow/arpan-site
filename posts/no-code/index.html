@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-164566872-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-164566872-1');
+    </script>
+
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    
+    <meta name="description" content="The prospects of creating software without code are enticing. If you are a budding entrepreneur, you can create an app without learning to program or hiring expensive developers. Even large companies can save money by...">
+    
+
+    <link rel="stylesheet" href="https:&#x2F;&#x2F;arpan.one&#x2F;fonts.css">
+    <link rel="stylesheet" href="https:&#x2F;&#x2F;arpan.one&#x2F;style.css">
+
+    <title>
+    Is No-Code the Future of Software? - Arpan Dhatt
+</title>
+
+    
+</head>
+
+<body>
+    
+    <div class="wrap">
+        
+    <div class="section top-menu">
+        <p>
+            <a href="https:&#x2F;&#x2F;arpan.one">home</a>
+            
+                
+                    &#183;
+                    <a href="&#x2F;posts">posts</a>
+                
+                    &#183;
+                    <a href="&#x2F;tags">tags</a>
+                
+                    &#183;
+                    <a href="&#x2F;about">about</a>
+                
+                    &#183;
+                    <a href="https:&#x2F;&#x2F;github.com&#x2F;arpan-dhatt&#x2F;arpan-dhatt.github.io">github</a>
+                
+            
+        </p>
+    </div>
+
+        <h1 class="section" id="title" style="font-weight: inherit; text-align: left;">
+            <span><a href="https:&#x2F;&#x2F;arpan.one">Arpan Dhatt</a> / 
+    Is No-Code the Future of Software?
+</span>
+        </h1>
+        <div class="section" id="content">
+            
+    
+        
+            
+    
+    Mon Apr 13, 2020
+
+        
+        
+            
+                &#183; 1062 words
+            
+        
+        
+            
+            
+                &#183; 6 min
+            
+        
+        <hr/>
+    
+    <ul>
+        
+            <li>
+                <a href="https://arpan.one/posts/no-code/#introduction">Introduction</a>
+                
+            </li>
+        
+            <li>
+                <a href="https://arpan.one/posts/no-code/#what-even-is-code">What Even is Code?</a>
+                
+            </li>
+        
+            <li>
+                <a href="https://arpan.one/posts/no-code/#what-s-the-verdict">What&#x27;s the Verdict?</a>
+                
+            </li>
+        
+        </ul>
+    <h2 id="introduction">Introduction</h2>
+<p>The prospects of creating software without code are enticing. If you are a budding entrepreneur, you can create an app without learning to program or hiring expensive developers. Even large companies can save money by avoiding the hassles of software engineering. It seems like no-code is the future that should already be here. However, there are some fundamental issues with no-code development that limit its potential.</p>
+<h2 id="what-even-is-code">What Even is Code?</h2>
+<p>If we are so gung-ho about getting rid of code, we should have a good understanding of what is and isn't code. Per the dictionary definition, the word code means &quot;program instructions&quot; in the realm of software development. However, getting rid of instructions for computers is infeasible. For this reason, we are going to define code as it is used colloquially. This is a little harder to describe but is familiar to many people. This might ring a bell(don't worry about understanding it!):</p>
+<pre style="background-color:#2b303b;">
+<code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">calc_scores</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">students_to_valid_schedules</span><span style="color:#c0c5ce;">: &amp;BTreeMap&lt;String,Vec&lt;[String; </span><span style="color:#d08770;">8</span><span style="color:#c0c5ce;">]&gt;&gt;, </span><span style="color:#bf616a;">tries</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">usize</span><span style="color:#c0c5ce;">) -&gt; Vec&lt;(</span><span style="color:#b48ead;">f32</span><span style="color:#c0c5ce;">, Vec&lt;</span><span style="color:#b48ead;">usize</span><span style="color:#c0c5ce;">&gt;)&gt; {
+    </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> lengths: Vec&lt;</span><span style="color:#b48ead;">usize</span><span style="color:#c0c5ce;">&gt; = students_to_valid_schedules.</span><span style="color:#96b5b4;">values</span><span style="color:#c0c5ce;">().</span><span style="color:#96b5b4;">map</span><span style="color:#c0c5ce;">(|</span><span style="color:#bf616a;">schedules</span><span style="color:#c0c5ce;">| schedules.</span><span style="color:#96b5b4;">len</span><span style="color:#c0c5ce;">()).</span><span style="color:#96b5b4;">collect</span><span style="color:#c0c5ce;">();
+    </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> scores = Vec::new();
+    </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> rng = </span><span style="color:#96b5b4;">thread_rng</span><span style="color:#c0c5ce;">();
+    </span><span style="color:#b48ead;">for</span><span style="color:#c0c5ce;"> i in </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">..tries {
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> random_perm = </span><span style="color:#96b5b4;">create_random_permutation</span><span style="color:#c0c5ce;">(&amp;lengths, &amp;</span><span style="color:#b48ead;">mut</span><span style="color:#c0c5ce;"> rng);
+        </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> random_schedule_perm = Vec::new();
+        </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">(i, (student, schedules)) in students_to_valid_schedules.</span><span style="color:#96b5b4;">iter</span><span style="color:#c0c5ce;">().</span><span style="color:#96b5b4;">enumerate</span><span style="color:#c0c5ce;">() {
+            random_schedule_perm.</span><span style="color:#96b5b4;">push</span><span style="color:#c0c5ce;">(&amp;schedules[random_perm[i]]);
+        }
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> score = </span><span style="color:#96b5b4;">calc_set_score</span><span style="color:#c0c5ce;">(&amp;random_schedule_perm);
+        scores.</span><span style="color:#96b5b4;">push</span><span style="color:#c0c5ce;">((score,random_perm));
+        </span><span style="color:#96b5b4;">prune_scores</span><span style="color:#c0c5ce;">(&amp;</span><span style="color:#b48ead;">mut</span><span style="color:#c0c5ce;"> scores);
+    }
+    </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;"> scores;
+}
+
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">create_random_permutation</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">lengths</span><span style="color:#c0c5ce;">: &amp;Vec&lt;</span><span style="color:#b48ead;">usize</span><span style="color:#c0c5ce;">&gt;, </span><span style="color:#bf616a;">rng</span><span style="color:#c0c5ce;">: &amp;</span><span style="color:#b48ead;">mut</span><span style="color:#c0c5ce;"> ThreadRng) -&gt; Vec&lt;</span><span style="color:#b48ead;">usize</span><span style="color:#c0c5ce;">&gt; {
+    </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> out = Vec::new();
+    </span><span style="color:#b48ead;">for</span><span style="color:#c0c5ce;"> len in lengths {
+        out.</span><span style="color:#96b5b4;">push</span><span style="color:#c0c5ce;">(rng.</span><span style="color:#96b5b4;">gen_range</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">,len))
+    }
+    </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;"> out;
+}
+</span></code></pre>
+<p>That was a bit of code from one of my shorter projects written in <a href="https://www.rust-lang.org">Rust</a>. If you are unfamiliar with programming, it might seem a little intimidating. Even if you do have experience in programming, but for higher-level languages(e.g. C#, Python), there still might be some peculiar symbols and syntax that seem unnecessary. Let's keep going up the chain of programming languages. Here is some <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">Javascript</a>:</p>
+<pre style="background-color:#2b303b;">
+<code class="language-js" data-lang="js"><span style="color:#b48ead;">const </span><span style="color:#bf616a;">list </span><span style="color:#c0c5ce;">= new LinkedList();
+</span><span style="color:#bf616a;">list</span><span style="color:#c0c5ce;">.</span><span style="color:#96b5b4;">add</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">red</span><span style="color:#c0c5ce;">&quot;);
+</span><span style="color:#bf616a;">list</span><span style="color:#c0c5ce;">.</span><span style="color:#96b5b4;">add</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">orange</span><span style="color:#c0c5ce;">&quot;);
+</span><span style="color:#bf616a;">list</span><span style="color:#c0c5ce;">.</span><span style="color:#96b5b4;">add</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">yellow</span><span style="color:#c0c5ce;">&quot;);
+
+</span><span style="color:#ebcb8b;">console</span><span style="color:#c0c5ce;">.</span><span style="color:#96b5b4;">log</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">list</span><span style="color:#c0c5ce;">.</span><span style="color:#96b5b4;">get</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">));
+
+</span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">(</span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">color </span><span style="color:#c0c5ce;">of </span><span style="color:#bf616a;">list</span><span style="color:#c0c5ce;">) {
+    </span><span style="color:#ebcb8b;">console</span><span style="color:#c0c5ce;">.</span><span style="color:#96b5b4;">log</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">color</span><span style="color:#c0c5ce;">);
+} 
+</span><span style="color:#ebcb8b;">console</span><span style="color:#c0c5ce;">.</span><span style="color:#96b5b4;">log</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">list</span><span style="color:#c0c5ce;">.</span><span style="color:#96b5b4;">remove</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">));
+
+</span><span style="color:#ebcb8b;">console</span><span style="color:#c0c5ce;">.</span><span style="color:#96b5b4;">log</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">list</span><span style="color:#c0c5ce;">.</span><span style="color:#96b5b4;">get</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">));
+
+</span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">array1 </span><span style="color:#c0c5ce;">= [...</span><span style="color:#bf616a;">list</span><span style="color:#c0c5ce;">.</span><span style="color:#96b5b4;">values</span><span style="color:#c0c5ce;">()];
+</span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">array2 </span><span style="color:#c0c5ce;">= [...</span><span style="color:#bf616a;">list</span><span style="color:#c0c5ce;">];
+</span></code></pre>
+<p>This might be a little easier to understand for some people. There are fewer strange symbols and the syntax is cleaner. I'm assuming everyone would still consider this code. Let's take it up another notch. Take a look at this <a href="https://www.python.org">Python</a>:</p>
+<pre style="background-color:#2b303b;">
+<code class="language-python" data-lang="python"><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">graph_mat</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">title</span><span style="color:#c0c5ce;">, </span><span style="color:#bf616a;">values</span><span style="color:#c0c5ce;">, </span><span style="color:#bf616a;">width</span><span style="color:#c0c5ce;">=</span><span style="color:#d08770;">10</span><span style="color:#c0c5ce;">):
+    maximum = </span><span style="color:#96b5b4;">max</span><span style="color:#c0c5ce;">(values)
+    mat = []
+    mat.</span><span style="color:#bf616a;">append</span><span style="color:#c0c5ce;">(title[:width] + &quot; &quot; * </span><span style="color:#96b5b4;">max</span><span style="color:#c0c5ce;">(</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">,width - </span><span style="color:#96b5b4;">len</span><span style="color:#c0c5ce;">(title[:width])))
+    </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">value </span><span style="color:#b48ead;">in </span><span style="color:#c0c5ce;">values:
+        mat.</span><span style="color:#bf616a;">append</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">bar</span><span style="color:#c0c5ce;">(value/maximum, </span><span style="color:#bf616a;">width</span><span style="color:#c0c5ce;">=width))
+    </span><span style="color:#b48ead;">return </span><span style="color:#c0c5ce;">mat
+
+
+</span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">graph_all_mats</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">data_dict</span><span style="color:#c0c5ce;">, </span><span style="color:#bf616a;">iters</span><span style="color:#c0c5ce;">, </span><span style="color:#bf616a;">width</span><span style="color:#c0c5ce;">=</span><span style="color:#d08770;">10</span><span style="color:#c0c5ce;">):
+    mats = []
+    </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">key, data </span><span style="color:#b48ead;">in </span><span style="color:#c0c5ce;">data_dict.</span><span style="color:#bf616a;">items</span><span style="color:#c0c5ce;">():
+        mats.</span><span style="color:#bf616a;">append</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">graph_mat</span><span style="color:#c0c5ce;">(key, data, </span><span style="color:#bf616a;">width</span><span style="color:#c0c5ce;">=width))
+
+    </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">l </span><span style="color:#b48ead;">in </span><span style="color:#96b5b4;">range</span><span style="color:#c0c5ce;">(iters+</span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">):
+        row = &quot;&quot;
+        </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">mat </span><span style="color:#b48ead;">in </span><span style="color:#c0c5ce;">mats:
+            </span><span style="color:#b48ead;">if </span><span style="color:#96b5b4;">len</span><span style="color:#c0c5ce;">(mat) &gt; l:
+                row += &quot;</span><span style="color:#a3be8c;">|</span><span style="color:#c0c5ce;">&quot; + mat[l] + &quot;</span><span style="color:#96b5b4;">\t</span><span style="color:#c0c5ce;">&quot;
+            </span><span style="color:#b48ead;">else</span><span style="color:#c0c5ce;">:
+                row += &quot;</span><span style="color:#a3be8c;">|</span><span style="color:#c0c5ce;">&quot; + width * &quot; &quot; + &quot;</span><span style="color:#96b5b4;">\t</span><span style="color:#c0c5ce;">&quot;
+        </span><span style="color:#96b5b4;">print</span><span style="color:#c0c5ce;">(row)
+</span></code></pre>
+<p>Python is considered one of the most readable programming languages out there. It was created to make getting started in programming as easy as possible. Now it has become one of the most popular languages and number one in fields like data science. However, most people would still consider this code. Let's take another step forward into <a href="https://scratch.mit.edu">Scratch</a>, a programming language very different from the ones we have looked at so far:
+<img src="/images/scratch-code.png" alt="Scratch Programming language, a visual, drag-and-drop language" />
+This is used around the world to teach elementary students how to code. By using these blocks rather than text, they can avoid the intricacies of complex syntax and the pitfalls that can come from mistyping. However, this can still get complicated, as you see above. We can keep going, but we have already discarded one of the most frustrating parts of programming to most people: typing. This is about as far as general-purpose programming languages can get. They don't get much simpler from here. Now, let's delve outside general-purpose languages and into tools that are for specific purposes. One common example is website generators like <a href="https://squarespace.com">Squarespace</a>, <a href="https://wix.com">Wix</a>, and <a href="https://weebly.com">Weebly</a>. These help users create websites by letting them drag and drop page elements like text and images rather than pieces of code. They have hidden the code because the flexibility demanded from the tool has reached a tipping point. Where that tipping point is depends on the application.</p>
+<p>In summary, these no-code platforms are just another part of the spectrum of programming, just like where Rust, Javascript, and Python are. In the end, you are still giving the computer instructions. If we go back the dictionary definition, you are coding. You may not be typing code, but dragging and dropping instructions for the computer to execute. The complexity of the instructions will still depend on the complexity of the goal. If you just want a website with some images on it, you don't need to know how to write loops and understand data structures. You just need to a find a tool that puts your images on a website. If you want to build an app that does <a href="https://www.apple.com/covid19/contacttracing">privacy-preserving contact tracing</a> then you are going to have to get your hands dirty, and a website generator isn't the best choice(or even a choice at all) for building something like this.</p>
+<h2 id="what-s-the-verdict">What's the Verdict?</h2>
+<p>The answer is &quot;not completely&quot;. No-code development will find its way into many applications. It already has. Lots of signal processing applications use no code-development. Instead of coding, people construct flow-charts of mathematical operations. Many websites already use tools like Wordpress and other services to delegate programming to someone else. If you are building something that has been done many times before, such as a showcase website for your product, it can likely be done without any programming, and the result can be built quickly and reliably. However, all of these tools have their limitations, namely flexibility. The amount of instructions the computer needs doesn't change. No-code is viable only when a large part of the problem has already been solved and you just put the pieces together. The future will still have a lot of complex and novel problems that haven't been solved before. In those situations, no-code is a no-go.</p>
+<p>-Arpan Dhatt, an Unbiased Developer</p>
+
+    
+            <div class="tag-container">
+                
+                    <span class="tag">
+                        <a href="https:&#x2F;&#x2F;arpan.one&#x2F;tags&#x2F;programming&#x2F;">
+                            #programming
+                        </a>
+                    </span>
+                
+                    <span class="tag">
+                        <a href="https:&#x2F;&#x2F;arpan.one&#x2F;tags&#x2F;no-code&#x2F;">
+                            #no-code
+                        </a>
+                    </span>
+                
+            </div>
+        
+
+        </div>
+        
+    <div class="section bottom-menu">
+        <hr/>
+        <p>
+            <a href="https:&#x2F;&#x2F;arpan.one">home</a>
+            
+                
+                    &#183;
+                    <a href="&#x2F;posts">posts</a>
+                
+                    &#183;
+                    <a href="&#x2F;tags">tags</a>
+                
+                    &#183;
+                    <a href="&#x2F;about">about</a>
+                
+                    &#183;
+                    <a href="https:&#x2F;&#x2F;github.com&#x2F;arpan-dhatt&#x2F;arpan-dhatt.github.io">github</a>
+                
+            
+        </p>
+    </div>
+
+        
+    
+        <div class="section footer">
+            © 2020 Arpan Dhatt
+        </div>
+    
+
+    </div>
+
+</body>
+
+</html>
