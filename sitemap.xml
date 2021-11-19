@@ -14,14 +14,20 @@
         <lastmod>2020-04-28</lastmod>
     </url>
     <url>
-        <loc>https://arpan.one/posts/no-code/</loc>
-        <lastmod>2020-04-13</lastmod>
+        <loc>https://arpan.one/projects/</loc>
+    </url>
+    <url>
+        <loc>https://arpan.one/projects/forestflock/</loc>
+        <lastmod>2021-10-06</lastmod>
     </url>
     <url>
         <loc>https://arpan.one/tags/</loc>
     </url>
     <url>
         <loc>https://arpan.one/tags/apple/</loc>
+    </url>
+    <url>
+        <loc>https://arpan.one/tags/bluetooth/</loc>
     </url>
     <url>
         <loc>https://arpan.one/tags/contact-tracing/</loc>
@@ -33,9 +39,12 @@
         <loc>https://arpan.one/tags/google/</loc>
     </url>
     <url>
-        <loc>https://arpan.one/tags/no-code/</loc>
+        <loc>https://arpan.one/tags/hackathon/</loc>
     </url>
     <url>
-        <loc>https://arpan.one/tags/programming/</loc>
+        <loc>https://arpan.one/tags/raspberry-pi/</loc>
+    </url>
+    <url>
+        <loc>https://arpan.one/tags/rust/</loc>
     </url>
 </urlset>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-164566872-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-164566872-1');
+    </script>
+
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    
+    <meta name="description" content="One of the most effective ways to combat an epidemic is contact tracing.  Selectively quarantining people may not be as effective as the broad quarantining of an entire population, but it has many benefits, such...">
+    
+
+    <link rel="stylesheet" href="https://arpan.one/fonts.css">
+    <link rel="stylesheet" href="https://arpan.one/style.css">
+
+    <title>
+    Mesh Networking with Bluetooth Low Energy - Arpan Dhatt
+</title>
+
+    
+</head>
+
+<body>
+    
+    <div class="wrap">
+        
+    <div class="section top-menu">
+        <p>
+            <a href="https:&#x2F;&#x2F;arpan.one">home</a>
+            
+                
+                    &#183;
+                    <a href="&#x2F;projects">projects</a>
+                
+                    &#183;
+                    <a href="&#x2F;posts">posts</a>
+                
+                    &#183;
+                    <a href="&#x2F;about">about</a>
+                
+                    &#183;
+                    <a href="https:&#x2F;&#x2F;github.com&#x2F;arpan-dhatt&#x2F;arpan-dhatt.github.io">github</a>
+                
+            
+        </p>
+    </div>
+
+        <h1 class="section" id="title" style="font-weight: inherit; text-align: left;">
+            <span><a href="https:&#x2F;&#x2F;arpan.one">Arpan Dhatt</a> / 
+    Mesh Networking with Bluetooth Low Energy
+</span>
+        </h1>
+        <div class="section" id="content">
+            
+    
+        
+            
+    
+    Wed Oct  6, 2021
+
+        
+        
+            
+                &#183; 1002 words
+            
+        
+        
+            
+            
+                &#183; 6 min
+            
+        
+        <hr/>
+    
+    <ul>
+        
+            <li>
+                <a href="https://arpan.one/projects/forestflock/#introduction">Introduction</a>
+                
+            </li>
+        
+            <li>
+                <a href="https://arpan.one/projects/forestflock/#why-bluetooth-low-energy">Why Bluetooth Low Energy?</a>
+                
+            </li>
+        
+            <li>
+                <a href="https://arpan.one/projects/forestflock/#deciding-on-a-protocol">Deciding on a Protocol</a>
+                
+            </li>
+        
+            <li>
+                <a href="https://arpan.one/projects/forestflock/#interfacing-with-bluetooth">Interfacing with Bluetooth</a>
+                
+            </li>
+        
+            <li>
+                <a href="https://arpan.one/projects/forestflock/#structuring-the-program">Structuring the Program</a>
+                
+            </li>
+        
+            <li>
+                <a href="https://arpan.one/projects/forestflock/#testing-the-code">Testing the Code</a>
+                
+            </li>
+        
+            <li>
+                <a href="https://arpan.one/projects/forestflock/#conclusion">Conclusion</a>
+                
+            </li>
+        
+        </ul>
+    <h2 id="introduction">Introduction</h2>
+<p>What was ForestFlock?
+ForestFlock started as a project four friends and I did as a hackathon project. After spending a grueling 24 hours writing code for hours on end with very little sleep, we were fortunate enough to <a href="https://devpost.com/software/forestflock" target="_blank">win first place</a>. To explain what it is, here's a quick blurb from our project submission page:</p>
+<blockquote>
+<p>ForestFlock is a novel software and hardware system that gives agencies that monitor wilderness areas powerful insights into what is happening at all parts of their wilderness. ForestFlock consists of various sensor nodes that are connected in a wireless Bluetooth mesh network that collect and analyze sensor inputs and then transmit relevant information over large distances without an Internet connection using a mesh network. The sensor nodes would be self-sufficient with solar panels for power and the mesh network for connectivity.</p>
+</blockquote>
+<p>There were many components in this project, from hardware sensors that detected humidity to AI-enhanced microphones that detected specific sounds. We even built an iPad app to interface with the network. However, I mainly worked on the Bluetooth mesh network to communicate events without an internet connection. This is what I'll focus on for the rest of this post.</p>
+<h2 id="why-bluetooth-low-energy">Why Bluetooth Low Energy?</h2>
+<p>I gravitated towards BLE because it consumed very little power compared to serial Bluetooth which things like audio headphones use. Also, for our particular project, the network wouldn't need to support a large amount of bandwidth. It was only intended to send signals with small amounts of identifying information.</p>
+<p>Now Bluetooth 4.2 already has a mesh network protocol built which could have been utilized instead. It also supports larger amounts of data than my implementation supports. However, I decided not to use it for a couple of reasons.</p>
+<p>For one, setting it up on the Raspberry Pi was nigh-impossible, especially since the vanishingly small amount of documentation I was following was outdated. Even installing the required <code>meshctl</code> took a lot of time and it didn't even work properly when it was installed. Overall, it was more trouble than it would probably be worth, considering I put in a lot of work in an attempt to just activate it rather than actually interface with it.</p>
+<p>Another, more minor reason I decided to keep away from <code>meshctl</code> was because it wasn't updated to use Coded PHY. Bluetooth 5 essentially introduced it as a way to allow extremely long-range BLE communication. If I implemented my own mesh protocol, it would be able to benefit from Coded PHY since the Raspberry Pi 4 implements Bluetooth 5. I did realize at a later point that Coded PHY is an <em>optional</em> feature for Bluetooth 5 implementations. Being a pretty niche tool, it's not implemented on the Raspberry Pi's chip, so I wouldn't have been able to use it, even if I wanted to.</p>
+<h2 id="deciding-on-a-protocol">Deciding on a Protocol</h2>
+<p>It took some time to find an appropriate way to communicate over BLE. In short, BLE works using <em>advertisements</em> and <em>services</em>. A BLE device's services essentially include its features. For a blood glucose monitor, it would have a service where other devices can read some floating point value. The blood glucose monitor advertises that it has some readable value. In its particular case, the value would be the blood gluecose level detected. This is likely the most common case for BLE since it's pretty versatile. You can even allow devices to write small amounts of data through services for things like smart home devices.</p>
+<p>However, I ended up doing something more similar to another application of BLE: beacons. Briefly, beacons allow mobile devices like phones to know they're at some location. This is done simply be encoding all the necessary information in the advertisement. No services are exposed by the BLE beacon. The two most common beacon protocols are iBeacon, by Apple, and Eddystone, by Google.</p>
+<p>I ended up choosing Eddystone since I found a lot better documentation on it and even some instructions to get a Raspberry Pi to emit a some given data. Eddystone is generally meant to encode some URI and allow nearby devices to open it. For example, it could be the website URL of whatever store a user is at. Instead of sending URI-encoded data, I could just send any bytes of my choosing.</p>
+<h2 id="interfacing-with-bluetooth">Interfacing with Bluetooth</h2>
+<p>Why did you use hcitool when it was deprecated? Why not Bluetoothctl?
+There were a couple of ways I could interact with Bluetooth on the Raspberry Pi, namely <code>hcitool</code> and <code>bluetoothctl</code>. At this point in time, <code>hcitool</code> and its accompanying tools, like <code>hcidump</code> were deprecated and replaced with <code>bluetoothctl</code>. However, I ended up going with <code>hcitool</code> since there was significantly more documentation on the tool compared to the latter. Also, programmatically using <code>hcitool</code> seemed much easier since it had a few command line options that returned values rather than <code>bluetoothctl</code> which nearly offered a full terminal user interface. </p>
+<p>Explain the commands you used to control the Bluetooth chip.
+Controlling the Bluetooth chip involved the <code>hcitool cmd</code> command and <code>hcitool lescan</code> command. The first of these had a few subcommands I used to set advertisiment frequency, advertisiment mode, and advertisiment data. The following command activated advertisiment and sets the device's mode to non-connectable. This means that no device can form a connection with this one. It may only receive broadcasted advertisements.</p>
+<pre data-lang="sh" class="language-sh "><code class="language-sh" data-lang="sh">hcitool cmd 0x08 0x000a 01
+</code></pre>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">fn main() {}
+</code></pre>
+<p>How can Bluetooth Packets be read? Does it take a lot of power?</p>
+<h2 id="structuring-the-program">Structuring the Program</h2>
+<p>Why did you write it in Rust?
+How was the multithreaded architecture set up?
+How did you parse the hcidump output?
+How did you encode and decode information from the packets?
+What's with the TCP socket?</p>
+<h2 id="testing-the-code">Testing the Code</h2>
+<p>How did you test the code? Tell us about the client binaries you wrote.
+What particular bugs or issues did you find with this testing?</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>What did we do again?
+What should you, or I, take away from this?</p>
+
+    
+            <div class="tag-container">
+                
+                    <span class="tag">
+                        <a href="https://arpan.one/tags/hackathon/">
+                            #hackathon
+                        </a>
+                    </span>
+                
+                    <span class="tag">
+                        <a href="https://arpan.one/tags/rust/">
+                            #rust
+                        </a>
+                    </span>
+                
+                    <span class="tag">
+                        <a href="https://arpan.one/tags/bluetooth/">
+                            #bluetooth
+                        </a>
+                    </span>
+                
+                    <span class="tag">
+                        <a href="https://arpan.one/tags/raspberry-pi/">
+                            #raspberry-pi
+                        </a>
+                    </span>
+                
+            </div>
+        
+
+        </div>
+        
+    <div class="section bottom-menu">
+        <hr/>
+        <p>
+            <a href="https:&#x2F;&#x2F;arpan.one">home</a>
+            
+                
+                    &#183;
+                    <a href="&#x2F;projects">projects</a>
+                
+                    &#183;
+                    <a href="&#x2F;posts">posts</a>
+                
+                    &#183;
+                    <a href="&#x2F;about">about</a>
+                
+                    &#183;
+                    <a href="https:&#x2F;&#x2F;github.com&#x2F;arpan-dhatt&#x2F;arpan-dhatt.github.io">github</a>
+                
+            
+        </p>
+    </div>
+
+        
+    
+        <div class="section footer">
+            © 2021 Arpan Dhatt
+        </div>
+    
+
+    </div>
+
+</body>
+
+</html>
