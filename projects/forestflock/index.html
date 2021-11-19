@@ -52,7 +52,7 @@
                     <a href="&#x2F;about">about</a>
                 
                     &#183;
-                    <a href="https:&#x2F;&#x2F;github.com&#x2F;arpan-dhatt&#x2F;arpan-dhatt.github.io">github</a>
+                    <a href="https:&#x2F;&#x2F;github.com&#x2F;arpan-dhatt">github</a>
                 
             
         </p>
@@ -74,13 +74,13 @@
         
         
             
-                &#183; 1002 words
+                &#183; 996 words
             
         
         
             
             
-                &#183; 6 min
+                &#183; 5 min
             
         
         <hr/>
@@ -144,10 +144,8 @@ ForestFlock started as a project four friends and I did as a hackathon project. 
 There were a couple of ways I could interact with Bluetooth on the Raspberry Pi, namely <code>hcitool</code> and <code>bluetoothctl</code>. At this point in time, <code>hcitool</code> and its accompanying tools, like <code>hcidump</code> were deprecated and replaced with <code>bluetoothctl</code>. However, I ended up going with <code>hcitool</code> since there was significantly more documentation on the tool compared to the latter. Also, programmatically using <code>hcitool</code> seemed much easier since it had a few command line options that returned values rather than <code>bluetoothctl</code> which nearly offered a full terminal user interface. </p>
 <p>Explain the commands you used to control the Bluetooth chip.
 Controlling the Bluetooth chip involved the <code>hcitool cmd</code> command and <code>hcitool lescan</code> command. The first of these had a few subcommands I used to set advertisiment frequency, advertisiment mode, and advertisiment data. The following command activated advertisiment and sets the device's mode to non-connectable. This means that no device can form a connection with this one. It may only receive broadcasted advertisements.</p>
-<pre data-lang="sh" class="language-sh "><code class="language-sh" data-lang="sh">hcitool cmd 0x08 0x000a 01
-</code></pre>
-<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">fn main() {}
-</code></pre>
+<pre data-lang="rust" style="background-color:#282828;color:#fdf4c1aa;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#fa5c4b;">fn </span><span style="color:#8ec07c;">main</span><span>() {}
+</span></code></pre>
 <p>How can Bluetooth Packets be read? Does it take a lot of power?</p>
 <h2 id="structuring-the-program">Structuring the Program</h2>
 <p>Why did you write it in Rust?
@@ -210,7 +208,7 @@ What should you, or I, take away from this?</p>
                     <a href="&#x2F;about">about</a>
                 
                     &#183;
-                    <a href="https:&#x2F;&#x2F;github.com&#x2F;arpan-dhatt&#x2F;arpan-dhatt.github.io">github</a>
+                    <a href="https:&#x2F;&#x2F;github.com&#x2F;arpan-dhatt">github</a>
                 
             
         </p>
