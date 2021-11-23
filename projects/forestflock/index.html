@@ -74,13 +74,13 @@
         
         
             
-                &#183; 999 words
+                &#183; 1898 words
             
         
         
             
             
-                &#183; 5 min
+                &#183; 10 min
             
         
         <hr/>
@@ -108,12 +108,7 @@
             </li>
         
             <li>
-                <a href="https://arpan.one/projects/forestflock/#structuring-the-program">Structuring the Program</a>
-                
-            </li>
-        
-            <li>
-                <a href="https://arpan.one/projects/forestflock/#testing-the-code">Testing the Code</a>
+                <a href="https://arpan.one/projects/forestflock/#program-structure">Program Structure</a>
                 
             </li>
         
@@ -124,10 +119,9 @@
         
         </ul>
     <h2 id="introduction">Introduction</h2>
-<p>What was ForestFlock?
-ForestFlock started as a project four friends and I did as a hackathon project. After spending a grueling 24 hours writing code for hours on end with very little sleep, we were fortunate enough to <a href="https://devpost.com/software/forestflock" target="_blank">win first place</a>. To explain what it is, here's a quick blurb from our project submission page:</p>
+<p>ForestFlock started as a project four friends and I did for a hackathon. After spending a grueling 24 hours writing code for hours on end with very little sleep, we were fortunate enough to <a href="https://devpost.com/software/forestflock" target="_blank">win first place</a>. To explain what it is, here's a quick blurb from our project submission page:</p>
 <blockquote>
-<p>ForestFlock is a novel software and hardware system that gives agencies that monitor wilderness areas powerful insights into what is happening at all parts of their wilderness. ForestFlock consists of various sensor nodes that are connected in a wireless Bluetooth mesh network that collect and analyze sensor inputs and then transmit relevant information over large distances without an Internet connection using a mesh network. The sensor nodes would be self-sufficient with solar panels for power and the mesh network for connectivity.</p>
+<p>ForestFlock is a novel software and hardware system that gives agencies that monitor wilderness areas powerful insights into what is happening in their area. ForestFlock consists of various sensor nodes that are connected in a wireless Bluetooth mesh network that collect and analyze sensor inputs and then transmit relevant information over large distances without an Internet connection. The sensor nodes would be self-sufficient with solar panels for power and the mesh network for connectivity.</p>
 </blockquote>
 <p>There were many components in this project, from hardware sensors that detected humidity to AI-enhanced microphones that detected specific sounds. We even built an iPad app to interface with the network. However, I mainly worked on the Bluetooth mesh network to communicate events without an internet connection. This is what I'll focus on for the rest of this post.</p>
 <h2 id="why-bluetooth-low-energy">Why Bluetooth Low Energy?</h2>
@@ -140,25 +134,63 @@ ForestFlock started as a project four friends and I did as a hackathon project. 
 <p>However, I ended up doing something more similar to another application of BLE: beacons. Briefly, beacons allow mobile devices like phones to know they're at some location. This is done simply be encoding all the necessary information in the advertisement. No services are exposed by the BLE beacon. The two most common beacon protocols are iBeacon, by Apple, and Eddystone, by Google.</p>
 <p>I ended up choosing Eddystone since I found a lot better documentation on it and even some instructions to get a Raspberry Pi to emit a some given data. Eddystone is generally meant to encode some URI and allow nearby devices to open it. For example, it could be the website URL of whatever store a user is at. Instead of sending URI-encoded data, I could just send any bytes of my choosing.</p>
 <h2 id="interfacing-with-bluetooth">Interfacing with Bluetooth</h2>
-<p>Why did you use hcitool when it was deprecated? Why not Bluetoothctl?
-There were a couple of ways I could interact with Bluetooth on the Raspberry Pi, namely <code>hcitool</code> and <code>bluetoothctl</code>. At this point in time, <code>hcitool</code> and its accompanying tools, like <code>hcidump</code> were deprecated and replaced with <code>bluetoothctl</code>. However, I ended up going with <code>hcitool</code> since there was significantly more documentation on the tool compared to the latter. Also, programmatically using <code>hcitool</code> seemed much easier since it had a few command line options that returned values rather than <code>bluetoothctl</code> which nearly offered a full terminal user interface. </p>
-<p>Explain the commands you used to control the Bluetooth chip.
-Controlling the Bluetooth chip involved the <code>hcitool cmd</code> command and <code>hcitool lescan</code> command. The first of these had a few subcommands I used to set advertisiment frequency, advertisiment mode, and advertisiment data. The following command activated advertisiment and sets the device's mode to non-connectable. This means that no device can form a connection with this one. It may only receive broadcasted advertisements.</p>
+<p>There were a couple of ways I could interact with Bluetooth on the Raspberry Pi, namely <code>hcitool</code> and <code>bluetoothctl</code>. At this point in time, <code>hcitool</code> and its accompanying tools, like <code>hcidump</code> were deprecated and replaced with <code>bluetoothctl</code>. However, I ended up going with <code>hcitool</code> since there was significantly more documentation on the tool compared to the latter. Also, programmatically using <code>hcitool</code> seemed much easier since it had a few command line options that returned values rather than <code>bluetoothctl</code> which nearly offered a full terminal user interface. </p>
+<p>Controlling the Bluetooth chip involved the <code>hcitool cmd</code> command and <code>hcitool lescan</code> command. The first of these had a few subcommands I used to set advertisiment frequency, advertisiment mode, and advertisiment data. The following command activated advertisiment and sets the device's mode to non-connectable. This means that no device can form a connection with this one. It may only receive broadcasted advertisements.</p>
 <pre data-lang="bash" style="background-color:#282828;color:#fdf4c1aa;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#fdf4c1;">hcitool cmd 0x08 0x000a 01
 </span></code></pre>
-<p>How can Bluetooth Packets be read? Does it take a lot of power?</p>
-<h2 id="structuring-the-program">Structuring the Program</h2>
-<p>Why did you write it in Rust?
-How was the multithreaded architecture set up?
-How did you parse the hcidump output?
-How did you encode and decode information from the packets?
-What's with the TCP socket?</p>
-<h2 id="testing-the-code">Testing the Code</h2>
-<p>How did you test the code? Tell us about the client binaries you wrote.
-What particular bugs or issues did you find with this testing?</p>
+<p>The <code>0x08</code> means that this command is for the Bluetooth controller on the RPi. The <code>0x000a</code> specifies that the following data is meant to modify the advertising mode of this device. Finally, the <code>01</code> is one byte in hexadecimal specifying that the advertising mode should be set to true and be non-connectable. Now that the advertising mode is active, we can specify the frequency as to which Bluetooth advertisements should be sent. The following commands sets the frequency to 10 Hz.</p>
+<pre data-lang="bash" style="background-color:#282828;color:#fdf4c1aa;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#fdf4c1;">hcitool cmd 0x08 0x0006 A0 00 A0 00 03 00 00 00 00 00 00 00 00 07 00
+</span></code></pre>
+<p>This command is slighlty more complex. First of all, the <code>0x0006</code> is to signify that the advertising frequency is being set. The first two bytes <code>A0 00</code> set the minimum interval for the advertisement and the second two bytes <code>A0 00</code> set the maximum interval. The decimal value of <code>A0</code> is <code>160</code> in decimal. The Bluetooth chip will set the interval to <code>0.625ms * A0 = 100ms</code>. This is once every 10 seconds. You can read some more about this from the <a href="https://stackoverflow.com/questions/21124993/is-there-a-way-to-increase-ble-advertisement-frequency-in-bluez" target="_blank">stack overflow answer I used to interpret the bytes </a>. I also used a similar process for writing the advertising data but I used the <code>0x0008</code> subcommand code.</p>
+<p>Reading the incoming data makes use of two command line tools: <code>hcidump</code> and <code>hcitool lescan</code>. The first of these tools simply writes to the standard output the raw bytes of incoming packets. The second tool is once again <code>hcitool</code>. This time I use <code>lescan</code> which is just that: Bluetooth Low Energy scan. The complete command is as follows:</p>
+<pre data-lang="bash" style="background-color:#282828;color:#fdf4c1aa;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#fdf4c1;">hcitool lescan --duplicates --passive
+</span></code></pre>
+<p>The optional flags change the behavior of the scanning to allow duplicate advertising data to be stored and the passive flag is to ensure the device doesn't attempt to connect to the transimitting device for more information. Although this command enables the scanning function of the Bluetooth chip, this won't actually output what is received. Instead, the <code>hcidump</code> tool is needed.</p>
+<pre data-lang="bash" style="background-color:#282828;color:#fdf4c1aa;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#fdf4c1;">hcidump --raw
+</span></code></pre>
+<p>After the command is run, it will continously output any incoming BLE advertising packets in hexadecimal byte form directly into the standard output. This can be read and parsed by a separate program.</p>
+<h2 id="program-structure">Program Structure</h2>
+<p>The program ran four separate threads doing the following four tasks:</p>
+<ol>
+<li><code>lescan_thread</code>: Running the <code>hcitool lescan</code> command and keeping that child process open indefinitely. This was needed since as soon as this process was interrupted the device would stop scanning.</li>
+<li><code>packet_thread</code>: This ran the <code>hcidump</code> command line utility and parsed the advertisement bytes.</li>
+<li><code>graph_ingress_thread</code>: This allowed me to connect to any of the Raspberry Pi's through TCP for testing purposes.</li>
+<li><code>advertiser_thread</code>: This final thread would set the output advertisement data with the purpose of echoing whatever data was received by the <code>packet_thread</code>.</li>
+</ol>
+<p>The implementations of each of these threads are in <a href="https://github.com/arpan-dhatt/forestflock/blob/main/mesh-code/mesh-node/src/main.rs" target="_blank">this</a> <code>main.rs</code> file.</p>
+<p>The <code>packet_thread</code> and <code>graph_ingress_thread</code> needed to communicate with the <code>advertiser_thread</code> to set new advertisement data depending on what was either received from nearby nodes to directly inputted to the program through a TCP socket. This was done through a multiple-producer single-consumer (<code>mpsc</code>) channel. The <code>packet_thread</code> would use the blocking iterator from the <code>hci</code> crate to read data and send it into the channel.</p>
+<pre data-lang="rust" style="background-color:#282828;color:#fdf4c1aa;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#fa5c4b;">fn </span><span style="color:#8ec07c;">packet_thread_fn</span><span>(</span><span style="color:#fdf4c1;">tx</span><span>: Sender&lt;[</span><span style="color:#fa5c4b;">u8</span><span>; </span><span style="color:#d3869b;">40</span><span>]&gt;) {
+</span><span>    </span><span style="color:#fa5c4b;">let</span><span> scanner </span><span style="color:#fe8019;">= </span><span>hci::packet_reader();
+</span><span>    </span><span style="color:#fa5c4b;">for</span><span> packet </span><span style="color:#fe8019;">in</span><span> scanner { </span><span style="font-style:italic;color:#928374;">// blocks while new data is being received
+</span><span>        </span><span style="color:#fa5c4b;">if </span><span style="color:#fabd2f;">is_eddystone_packet</span><span>(</span><span style="color:#fe8019;">&amp;</span><span>packet) {
+</span><span>            </span><span style="color:#fa5c4b;">if let </span><span style="color:#fabd2f;">Some</span><span>(data) </span><span style="color:#fe8019;">= </span><span style="color:#fabd2f;">extract_data</span><span>(</span><span style="color:#fe8019;">&amp;</span><span>packet) {
+</span><span>                tx.</span><span style="color:#fabd2f;">send</span><span>(data).</span><span style="color:#fabd2f;">unwrap</span><span>();
+</span><span>            }
+</span><span>        }
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<p>On the advertisement thread the data is received and echoed to any nearby listening nodes. If this message has been received before it won't be sent again for a minute. This is so that new messages can make it through the network if they're already transmitting a different message. I didn't really have time to write a proper protocol since the one below has several problems. For one, if there is a &quot;choke point&quot; in the network, one message could get sent through while the other is supressed. Another issue is that the network has a very limited bandwidth. It can only send one message at a time. Originally, I wanted to allow messages to reside for a certain amount of time on the RPi and the advertisment thread would cycle through them. That way multiple messages could get through the network at the same time. Once again, I didn't have the time to modify the code below to make it more optimal.</p>
+<pre data-lang="rust" style="background-color:#282828;color:#fdf4c1aa;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#fa5c4b;">fn </span><span style="color:#8ec07c;">periodic_advertisement_controller</span><span>(</span><span style="color:#fdf4c1;">rx</span><span>: Receiver&lt;[</span><span style="color:#fa5c4b;">u8</span><span>; </span><span style="color:#d3869b;">40</span><span>]&gt;) {
+</span><span>    </span><span style="color:#fa5c4b;">let mut</span><span> first_seen: HashMap&lt;[</span><span style="color:#fa5c4b;">u8</span><span>; </span><span style="color:#d3869b;">40</span><span>], time::Instant&gt; </span><span style="color:#fe8019;">= </span><span>HashMap::new(); </span><span style="font-style:italic;color:#928374;">// WARNING: UNBOUNDED SIZE HASHMAP
+</span><span>
+</span><span>    </span><span style="color:#fa5c4b;">for</span><span> new_data </span><span style="color:#fe8019;">in</span><span> rx {
+</span><span>        </span><span style="color:#fabd2f;">println!</span><span>(</span><span style="color:#b8bb26;">&quot;</span><span style="color:#fdf4c1;">{}</span><span style="color:#b8bb26;">&quot;</span><span>, </span><span style="color:#fabd2f;">String</span><span>::from_utf8_lossy(</span><span style="color:#fe8019;">&amp;</span><span>new_data));
+</span><span>        </span><span style="color:#fa5c4b;">if</span><span> first_seen.</span><span style="color:#fabd2f;">contains_key</span><span>(</span><span style="color:#fe8019;">&amp;</span><span>new_data) { </span><span style="font-style:italic;color:#928374;">// this is a repeat message
+</span><span>            </span><span style="color:#fa5c4b;">if</span><span> first_seen.</span><span style="color:#fabd2f;">get</span><span>(</span><span style="color:#fe8019;">&amp;</span><span>new_data).</span><span style="color:#fabd2f;">unwrap</span><span>().</span><span style="color:#fabd2f;">elapsed</span><span>().</span><span style="color:#fabd2f;">as_millis</span><span>() </span><span style="color:#fe8019;">&gt; </span><span style="color:#d3869b;">60000 </span><span>{ </span><span style="font-style:italic;color:#928374;">// it&#39;s been long enough so let&#39;s resend this
+</span><span>                first_seen.</span><span style="color:#fabd2f;">insert</span><span>(new_data.</span><span style="color:#fabd2f;">clone</span><span>(), time::Instant::now());
+</span><span>                hci::set_advertising_data(</span><span style="color:#fe8019;">&amp;</span><span>new_data).</span><span style="color:#fabd2f;">unwrap</span><span>();
+</span><span>            }
+</span><span>        } </span><span style="color:#fa5c4b;">else </span><span>{ </span><span style="font-style:italic;color:#928374;">// completely new message so it should be set immediately
+</span><span>            first_seen.</span><span style="color:#fabd2f;">insert</span><span>(new_data.</span><span style="color:#fabd2f;">clone</span><span>(), time::Instant::now());
+</span><span>            hci::set_advertising_data(</span><span style="color:#fe8019;">&amp;</span><span>new_data).</span><span style="color:#fabd2f;">unwrap</span><span>();
+</span><span>        }
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<p>The rest of the code is much better documented and is in the repository <a href="https://github.com/arpan-dhatt/forestflock" target="_blank"><code>arpan-dhatt/forestflock</code></a>.</p>
 <h2 id="conclusion">Conclusion</h2>
-<p>What did we do again?
-What should you, or I, take away from this?</p>
+<p>If I were to do this project again, I would have changed several things. For one, the way I was encoding the floating point values into the advertisement was very inefficient. I could have instead just been using something like <code>f32.to_be_bytes()</code>. Also, extending this to work with more than floating point values was very painful since the code I had written didn't lend itself to flexible design. In fact, I pretty recently learned about a communication protocol for embedded devices called Controller-Area Network (CAN). That would have been very useful in the implementation for this since it allows me to specify encoding/decoding schemas that gave a lot of flexibility on the amount of space each value would take. More importantly, it even had C code generation which I could have leveraged to simplify the encoding and decoding.</p>
 
     
             <div class="tag-container">
