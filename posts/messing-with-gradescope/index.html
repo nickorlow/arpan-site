@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-164566872-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-164566872-1');
+    </script>
+
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    
+    <meta name="description" content="As a part of the Computer Organization and Architecture course at college, I have to complete per-week programming assignments in C. For those of you who know me, I&#x27;m not a big fan of C. The language and...">
+    
+
+    <link rel="stylesheet" href="https://arpan.one/fonts.css">
+    <link rel="stylesheet" href="https://arpan.one/style.css">
+
+    <title>
+    Doing C Assignments in Rust Instead - Arpan Dhatt
+</title>
+
+    
+</head>
+
+<body>
+    
+    <div class="wrap">
+        
+    <div class="section top-menu">
+        <p>
+            <a href="https:&#x2F;&#x2F;arpan.one">home</a>
+            
+                
+                    &#183;
+                    <a href="&#x2F;posts">posts</a>
+                
+                    &#183;
+                    <a href="&#x2F;about">about</a>
+                
+                    &#183;
+                    <a href="https:&#x2F;&#x2F;github.com&#x2F;arpan-dhatt">github</a>
+                
+            
+        </p>
+    </div>
+
+        <h1 class="section" id="title" style="font-weight: inherit; text-align: left;">
+            <span><a href="https:&#x2F;&#x2F;arpan.one">Arpan Dhatt</a> / 
+    Doing C Assignments in Rust Instead
+</span>
+        </h1>
+        <div class="section" id="content">
+            
+    
+        
+            
+    
+    Sun Feb  6, 2022
+
+        
+        
+            
+                &#183; 1385 words
+            
+        
+        
+            
+            
+                &#183; 7 min
+            
+        
+        <hr/>
+    
+    <ul>
+        
+            <li>
+                <a href="https://arpan.one/posts/messing-with-gradescope/#introduction">Introduction</a>
+                
+            </li>
+        
+            <li>
+                <a href="https://arpan.one/posts/messing-with-gradescope/#first-try-dynamic-libraries">First Try: Dynamic Libraries</a>
+                
+            </li>
+        
+            <li>
+                <a href="https://arpan.one/posts/messing-with-gradescope/#first-try-part-2-the-unix-process-api">First Try (Part 2): The UNIX Process API</a>
+                
+            </li>
+        
+            <li>
+                <a href="https://arpan.one/posts/messing-with-gradescope/#so-what-do-i-not-do">So What Do I (Not) Do?</a>
+                
+            </li>
+        
+        </ul>
+    <blockquote>
+<p>I do not actually recommend doing university assignments in a language other than the one required by the class unless you have explicit permission by the professor. If you decide to actually do what I have written in the blog post, do so at your own risk. Despite the fact the content in this post explains how to write these assignments in almost any language of your choosing, I still did mine in C and plan to do all the assignments in the way instructed by my professor.</p>
+</blockquote>
+<h2 id="introduction">Introduction</h2>
+<p>As a part of the Computer Organization and Architecture course at college, I have to complete per-week programming assignments in C. For those of you who know me, I'm not a big fan of C. The language and its syntax is simple and to-the-point, which is nice. However, there are so many ways to shoot yourself in the foot with such a memory unsafe language that offers little to no abstraction, even if you want it. For that reason, using something like Modern C++ or Rust would be a better choice in a lot of (but not all) scenarios. Either way, this post isn't about the differences between C and Rust, although I would love to wax on about it to anyone who will listen. If you want to know <em>right now</em> what, I did skip to the last section of this post. Everything from now until then is how I went about exploring the capabilities of Gradescope's grading system and our particular grading script's architecture. If you are a UT student, a portion of this post is a sneak peek into a small part of CS439.</p>
+<h2 id="first-try-dynamic-libraries">First Try: Dynamic Libraries</h2>
+<p>Going in, I already knew that <a href="https://gradescope-autograders.readthedocs.io/en/latest/#how-it-works" target="_blank">Gradescope used Docker containers running x86_64 Linux</a> to run the grading script provided by the instructors. Other than that, I'm not fully aware of all the limitations that Gradescope adds on top of these Docker containers. Perhaps it restricts network access, which would be prudent for a lot of university assignments, but I'm not entirely sure.</p>
+<p>Since I knew the OS and architecture of these Docker containers, I could pre-compile an executable and deliver that code through the GitHub repository I turn in. This would only work if there wasn't any filtering of submitted files. Luckily, there wasn't. The first idea that came to mind was a dynamic library. In a nutshell, dynamic libraries are program binaries that cannot be run on their own, but a different program can open them, read symbols from them, and execute functions that were compiled into that dynamic library. This is a commonly used feature of modern OS's that allow updating portions of programs independently and allow sharing compiled code between multiple programs, reducing memory usage. Using them is quite simple. First, I needed to create a Rust crate that exported a C-compatible function. I made some small changes to the default <code>Cargo.toml</code> and added the following code:</p>
+<pre data-lang="rust" style="background-color:#282828;color:#fdf4c1aa;" class="language-rust "><code class="language-rust" data-lang="rust"><span>#[</span><span style="color:#fdf4c1;">no_mangle</span><span>]
+</span><span style="color:#fa5c4b;">pub extern </span><span style="color:#b8bb26;">&quot;C&quot; </span><span style="color:#fa5c4b;">fn </span><span style="color:#8ec07c;">fib</span><span>(</span><span style="color:#fdf4c1;">n</span><span>: libc::uint32_t) -&gt; libc::uint32_t {
+</span><span>    </span><span style="color:#fa5c4b;">let mut</span><span> b2 </span><span style="color:#fe8019;">= </span><span style="color:#d3869b;">0</span><span>;
+</span><span>    </span><span style="color:#fa5c4b;">let mut</span><span> b1 </span><span style="color:#fe8019;">= </span><span style="color:#d3869b;">1</span><span>;
+</span><span>    </span><span style="color:#fa5c4b;">for </span><span style="color:#fe8019;">_ in </span><span style="color:#d3869b;">0</span><span style="color:#fe8019;">..</span><span>n {
+</span><span>        </span><span style="color:#fa5c4b;">let</span><span> temp </span><span style="color:#fe8019;">=</span><span> b1 </span><span style="color:#fe8019;">+</span><span> b2;
+</span><span>        b2 </span><span style="color:#fe8019;">=</span><span> b1;
+</span><span>        b1 </span><span style="color:#fe8019;">=</span><span> temp;
+</span><span>    }
+</span><span>    b2
+</span><span>}
+</span></code></pre>
+<p>After compiling this code to a C-compatible dynamic library, I can access the <code>fib</code> function using the following C code:</p>
+<pre data-lang="c" style="background-color:#282828;color:#fdf4c1aa;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#fa5c4b;">#include </span><span style="color:#b8bb26;">&lt;stdio.h&gt;
+</span><span style="color:#fa5c4b;">#include </span><span style="color:#b8bb26;">&lt;dlfcn.h&gt;
+</span><span>
+</span><span style="color:#fa5c4b;">int </span><span style="color:#8ec07c;">main</span><span>() {
+</span><span>    </span><span style="color:#fa5c4b;">void</span><span style="color:#fe8019;">*</span><span> handle;
+</span><span>    </span><span style="color:#fa5c4b;">unsigned int </span><span>(</span><span style="color:#fe8019;">*</span><span>fib)(</span><span style="color:#fa5c4b;">unsigned int</span><span>);
+</span><span>    </span><span style="font-style:italic;color:#928374;">// open the dynamic library so we can get functions
+</span><span>    handle </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">dlopen(</span><span style="color:#b8bb26;">&quot;./libfib.so&quot;</span><span style="color:#fdf4c1;">, RTLD_LAZY)</span><span>;
+</span><span>    </span><span style="color:#fa5c4b;">if </span><span>(</span><span style="color:#fe8019;">!</span><span>handle) {
+</span><span>        </span><span style="color:#fabd2f;">printf</span><span style="color:#fdf4c1;">(</span><span style="color:#b8bb26;">&quot;Failed to load dynamic lib\n&quot;</span><span style="color:#fdf4c1;">)</span><span>;
+</span><span>        </span><span style="color:#fa5c4b;">return</span><span> EXIT_FAILURE;
+</span><span>    }
+</span><span>    </span><span style="font-style:italic;color:#928374;">// bind our fib function pointer to the fib symbol from this library
+</span><span>    fib </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">dlsym(handle, </span><span style="color:#b8bb26;">&quot;fib&quot;</span><span style="color:#fdf4c1;">)</span><span>;
+</span><span>    </span><span style="color:#fa5c4b;">if </span><span>(</span><span style="color:#fe8019;">!</span><span>fib) {
+</span><span>        </span><span style="color:#fabd2f;">printf</span><span style="color:#fdf4c1;">(</span><span style="color:#b8bb26;">&quot;Failed to load fib symbol\n&quot;</span><span style="color:#fdf4c1;">)</span><span>;
+</span><span>        </span><span style="color:#fa5c4b;">return</span><span> EXIT_FAILURE;
+</span><span>    }
+</span><span>    </span><span style="color:#fabd2f;">printf</span><span style="color:#fdf4c1;">(</span><span style="color:#b8bb26;">&quot;fib(</span><span style="color:#fdf4c1;">%d</span><span style="color:#b8bb26;">): </span><span style="color:#fdf4c1;">%d</span><span style="color:#b8bb26;">&quot;</span><span style="color:#fdf4c1;">, </span><span style="color:#d3869b;">8</span><span style="color:#fdf4c1;">, (</span><span style="color:#fe8019;">*</span><span style="color:#fdf4c1;">fib)(</span><span style="color:#d3869b;">8</span><span style="color:#fdf4c1;">))</span><span>;
+</span><span>    </span><span style="color:#fa5c4b;">return</span><span> EXIT_SUCCESS;
+</span><span>}
+</span></code></pre>
+<p>The final step to getting this to work is simple, yet the reason why this approach doesn't work for our grading system. On Linux, we don't automatically get access to the <code>dlfcn.h</code> header. We need to link an additional library by passing the C compiler the <code>-ldl</code> flag. Only then can we use functions like <code>dlopen</code> and <code>dlsym</code>. This is simple enough on our end. We just need to add <code>-ldl</code> to the appropriate line our <code>Makefile</code>. Unfortunately, the grading script uses its own <code>Makefile</code> which won't link the needed library. But, what if I told you, there was another way...</p>
+<h2 id="first-try-part-2-the-unix-process-api">First Try (Part 2): The UNIX Process API</h2>
+<p>Ok, so if I couldn't dynamically load a Rust binary, could I just run it as an executable instead? To try this out I needed to make use of the <code>fork</code>, <code>execvp</code>, and <code>waitpid</code> UNIX functions. Only the <code>execvp</code> function is necessary if you wanted to code your assignment in a different language, but I needed to use all three for testing purposes. I won't explain in detail what all of these functions do, but if you want to learn more I recommend checking out <a href="https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-api.pdf" target="_blank">this interlude in <em>Operating Systems: Three Easy Pieces</em></a>.</p>
+<p>At this point in time, I had already completed the assignment so if I could use that to test whether or not what I was doing would cause an error or not. I haven't made a Rust port of the entire assignment so I couldn't exactly just use that to test. That would be quite a lot of work and I'm a pretty lazy person. That's where <code>fork</code> and <code>waitpid</code> came in. In short, I can use <code>fork</code> to create a child process that &quot;turns into&quot; the Rust program using <code>execvp</code>. In the parent process I could use <code>waitpid</code> and a provided macro to make sure everything proceeded as planned. If my code passed all the test cases in Gradescope, it means nothing errored out. If it failed, that meant the new code I added didn't work.</p>
+<p>This time there's no Rust code to share since the code could be literally anything that can be compiled to an executable. The C code is slighlty more involved, however:</p>
+<pre data-lang="c" style="background-color:#282828;color:#fdf4c1aa;" class="language-c "><code class="language-c" data-lang="c"><span>
+</span><span style="color:#fa5c4b;">#include </span><span style="color:#b8bb26;">&quot;ci.h&quot;
+</span><span style="color:#fa5c4b;">#include </span><span style="color:#b8bb26;">&lt;unistd.h&gt;
+</span><span style="color:#fa5c4b;">#include </span><span style="color:#b8bb26;">&lt;sys/wait.h&gt;
+</span><span>
+</span><span style="color:#fa5c4b;">int </span><span style="color:#8ec07c;">main</span><span>(</span><span style="color:#fa5c4b;">int </span><span style="color:#fdf4c1;">argc</span><span>, </span><span style="color:#fa5c4b;">char</span><span style="color:#fe8019;">* </span><span style="color:#fdf4c1;">argv</span><span>[]) {
+</span><span>    </span><span style="font-style:italic;color:#928374;">// creates a copy of this process: one parent, one child
+</span><span>    </span><span style="color:#fabd2f;">pid_t</span><span> pid </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">fork()</span><span>;
+</span><span>    </span><span style="font-style:italic;color:#928374;">// at this point on there are two identical processes
+</span><span>    </span><span style="color:#fa5c4b;">if </span><span>(pid </span><span style="color:#fe8019;">== </span><span style="color:#d3869b;">0</span><span>) {
+</span><span>        </span><span style="font-style:italic;color:#928374;">// fork returns 0 on the child process so this
+</span><span>        </span><span style="font-style:italic;color:#928374;">// must be the child process
+</span><span>        </span><span style="color:#fa5c4b;">char</span><span style="color:#fe8019;">*</span><span> myargs[</span><span style="color:#d3869b;">2</span><span>];
+</span><span>        </span><span style="font-style:italic;color:#928374;">// this is an executable binary that I ended 
+</span><span>        </span><span style="font-style:italic;color:#928374;">// with .c just in case hehe (might not be necessary)
+</span><span>        myargs[</span><span style="color:#d3869b;">0</span><span>] </span><span style="color:#fe8019;">= </span><span style="color:#b8bb26;">&quot;./funny.c&quot;</span><span>;
+</span><span>        myargs[</span><span style="color:#d3869b;">1</span><span>] </span><span style="color:#fe8019;">= </span><span style="color:#d3869b;">NULL</span><span>;
+</span><span>        </span><span style="font-style:italic;color:#928374;">// execvp turns this process into the one about
+</span><span>        </span><span style="font-style:italic;color:#928374;">// to be loaded, aka my Rust code :)
+</span><span>        </span><span style="color:#fdf4c1;">execvp(myargs[</span><span style="color:#d3869b;">0</span><span style="color:#fdf4c1;">], myargs)</span><span>;
+</span><span>    }
+</span><span>    </span><span style="color:#fa5c4b;">int</span><span> status;
+</span><span>    </span><span style="font-style:italic;color:#928374;">// wait until my Rust code finishes executing
+</span><span>    </span><span style="color:#fdf4c1;">waitpid(pid, </span><span style="color:#fe8019;">&amp;</span><span style="color:#fdf4c1;">status, </span><span style="color:#d3869b;">0</span><span style="color:#fdf4c1;">)</span><span>;
+</span><span>    </span><span style="color:#fa5c4b;">if </span><span>(</span><span style="color:#fe8019;">!</span><span style="color:#fdf4c1;">WIFEXITED(status)</span><span>) {
+</span><span>        </span><span style="font-style:italic;color:#928374;">// if the child process didn&#39;t run or was 
+</span><span>        </span><span style="font-style:italic;color:#928374;">// not successful the program ends prematurely
+</span><span>        </span><span style="font-style:italic;color:#928374;">// failing all test cases
+</span><span>        </span><span style="color:#fa5c4b;">return </span><span style="color:#d3869b;">0</span><span>;
+</span><span>    }
+</span><span>    </span><span style="font-style:italic;color:#928374;">// actual ci.c code provided in handout
+</span><span>}
+</span></code></pre>
+<p>With my breath held, I submitted this code to Gradescope and waited... <code>4.0/4.0</code>! It worked! The child process was successfully created, turned into the pre-compiled Rust executable, and exited. The parent process saw this and continued executing as normal.</p>
+<h2 id="so-what-do-i-not-do">So What Do I (Not) Do?</h2>
+<p>The <code>fork</code> and <code>waitpid</code> commands are not necessary if you write your entire assignment in a different language. You can pre-compile the entire assignmnet into an executable and run it in the grader like this:</p>
+<pre data-lang="c" style="background-color:#282828;color:#fdf4c1aa;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#fa5c4b;">#include </span><span style="color:#b8bb26;">&lt;unistd.h&gt;
+</span><span style="color:#fa5c4b;">#include </span><span style="color:#b8bb26;">&lt;sys/wait.h&gt;
+</span><span>
+</span><span style="color:#fa5c4b;">int </span><span style="color:#8ec07c;">main</span><span>(</span><span style="color:#fa5c4b;">int </span><span style="color:#fdf4c1;">argc</span><span>, </span><span style="color:#fa5c4b;">char</span><span style="color:#fe8019;">* </span><span style="color:#fdf4c1;">argv</span><span>[]) {
+</span><span>    </span><span style="color:#fa5c4b;">char</span><span style="color:#fe8019;">*</span><span> myargs[</span><span style="color:#d3869b;">2</span><span>];
+</span><span>    myargs[</span><span style="color:#d3869b;">0</span><span>] </span><span style="color:#fe8019;">= </span><span style="color:#b8bb26;">&quot;./theassignment.c&quot;</span><span>;
+</span><span>    myargs[</span><span style="color:#d3869b;">1</span><span>] </span><span style="color:#fe8019;">= </span><span style="color:#d3869b;">NULL</span><span>;
+</span><span>    </span><span style="color:#fdf4c1;">execvp(myargs[</span><span style="color:#d3869b;">0</span><span style="color:#fdf4c1;">], myargs)</span><span>;
+</span><span>}
+</span></code></pre>
+<p>This should work perfectly fine. You could write the assignment in Rust, C++, Go, or Swift, or basically anything that compiles to an x86_64 Linux executable. If you want to write it in Java (just <em>why?</em>) or something else that requires a runtime, it's a bit more complicated. Unless Gradescope's Docker images already contains the runtime you need, you will need to bring it yourself. Maybe you can just package the entire <code>node</code> runtime with your assignment if you want to do it in JavaScript or TypeScript, I don't know. I haven't tried it.</p>
+<p>And so, that's the end of this post. To whom it may concern, don't try doing your C assignment in C# (you know who you are).</p>
+
+    
+            <div class="tag-container">
+                
+                    <span class="tag">
+                        <a href="https://arpan.one/tags/c/">
+                            #c
+                        </a>
+                    </span>
+                
+                    <span class="tag">
+                        <a href="https://arpan.one/tags/college/">
+                            #college
+                        </a>
+                    </span>
+                
+                    <span class="tag">
+                        <a href="https://arpan.one/tags/rust/">
+                            #rust
+                        </a>
+                    </span>
+                
+            </div>
+        
+
+        </div>
+        
+    <div class="section bottom-menu">
+        <hr/>
+        <p>
+            <a href="https:&#x2F;&#x2F;arpan.one">home</a>
+            
+                
+                    &#183;
+                    <a href="&#x2F;posts">posts</a>
+                
+                    &#183;
+                    <a href="&#x2F;about">about</a>
+                
+                    &#183;
+                    <a href="https:&#x2F;&#x2F;github.com&#x2F;arpan-dhatt">github</a>
+                
+            
+        </p>
+    </div>
+
+        
+    
+        <div class="section footer">
+            © 2021 Arpan Dhatt
+        </div>
+    
+
+    </div>
+
+</body>
+
+</html>
