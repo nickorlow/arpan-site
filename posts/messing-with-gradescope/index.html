@@ -71,7 +71,7 @@
         
         
             
-                &#183; 1385 words
+                &#183; 1377 words
             
         
         
@@ -109,7 +109,7 @@
 <p>I do not actually recommend doing university assignments in a language other than the one required by the class unless you have explicit permission by the professor. If you decide to actually do what I have written in the blog post, do so at your own risk. Despite the fact the content in this post explains how to write these assignments in almost any language of your choosing, I still did mine in C and plan to do all the assignments in the way instructed by my professor.</p>
 </blockquote>
 <h2 id="introduction">Introduction</h2>
-<p>As a part of the Computer Organization and Architecture course at college, I have to complete per-week programming assignments in C. For those of you who know me, I'm not a big fan of C. The language and its syntax is simple and to-the-point, which is nice. However, there are so many ways to shoot yourself in the foot with such a memory unsafe language that offers little to no abstraction, even if you want it. For that reason, using something like Modern C++ or Rust would be a better choice in a lot of (but not all) scenarios. Either way, this post isn't about the differences between C and Rust, although I would love to wax on about it to anyone who will listen. If you want to know <em>right now</em> what, I did skip to the last section of this post. Everything from now until then is how I went about exploring the capabilities of Gradescope's grading system and our particular grading script's architecture. If you are a UT student, a portion of this post is a sneak peek into a small part of CS439.</p>
+<p>As a part of the Computer Organization and Architecture course at college, I have to complete per-week programming assignments in C. For those of you who know me, I'm not a big fan of C. The language and its syntax is simple and to-the-point, which is nice. However, there are so many ways to shoot yourself in the foot with such a memory unsafe language that offers little to no abstraction, even if you want it. For that reason, using something like Modern C++ or Rust would be a better choice in a lot of (but not all) scenarios. Either way, this post isn't about the differences between C and Rust, although I would love to wax on about it to anyone who will listen. If you want to know <em>right now</em> what to do. Everything from now until then is how I went about exploring the capabilities of Gradescope's grading system and our particular grading script's architecture. If you are a UT student, a portion of this post is a sneak peek into a small part of CS439.</p>
 <h2 id="first-try-dynamic-libraries">First Try: Dynamic Libraries</h2>
 <p>Going in, I already knew that <a href="https://gradescope-autograders.readthedocs.io/en/latest/#how-it-works" target="_blank">Gradescope used Docker containers running x86_64 Linux</a> to run the grading script provided by the instructors. Other than that, I'm not fully aware of all the limitations that Gradescope adds on top of these Docker containers. Perhaps it restricts network access, which would be prudent for a lot of university assignments, but I'm not entirely sure.</p>
 <p>Since I knew the OS and architecture of these Docker containers, I could pre-compile an executable and deliver that code through the GitHub repository I turn in. This would only work if there wasn't any filtering of submitted files. Luckily, there wasn't. The first idea that came to mind was a dynamic library. In a nutshell, dynamic libraries are program binaries that cannot be run on their own, but a different program can open them, read symbols from them, and execute functions that were compiled into that dynamic library. This is a commonly used feature of modern OS's that allow updating portions of programs independently and allow sharing compiled code between multiple programs, reducing memory usage. Using them is quite simple. First, I needed to create a Rust crate that exported a C-compatible function. I made some small changes to the default <code>Cargo.toml</code> and added the following code:</p>
@@ -188,7 +188,7 @@
 </span></code></pre>
 <p>With my breath held, I submitted this code to Gradescope and waited... <code>4.0/4.0</code>! It worked! The child process was successfully created, turned into the pre-compiled Rust executable, and exited. The parent process saw this and continued executing as normal.</p>
 <h2 id="so-what-do-i-not-do">So What Do I (Not) Do?</h2>
-<p>The <code>fork</code> and <code>waitpid</code> commands are not necessary if you write your entire assignment in a different language. You can pre-compile the entire assignmnet into an executable and run it in the grader like this:</p>
+<p>The <code>fork</code> and <code>waitpid</code> commands are not necessary if you write your entire assignment in a different language. You can pre-compile the entire assignment into an executable and run it in the grader like this:</p>
 <pre data-lang="c" style="background-color:#282828;color:#fdf4c1aa;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#fa5c4b;">#include </span><span style="color:#b8bb26;">&lt;unistd.h&gt;
 </span><span style="color:#fa5c4b;">#include </span><span style="color:#b8bb26;">&lt;sys/wait.h&gt;
 </span><span>
