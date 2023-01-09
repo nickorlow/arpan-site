@@ -28,7 +28,7 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Create Dockerfile
         run: |
-          echo <<\EOT > Dockerfile
+          cat <<\EOT > Dockerfile
           COPY . ./
           FROM nginx:stable-alpine
           COPY --from=build /app/build /usr/share/nginx/html
